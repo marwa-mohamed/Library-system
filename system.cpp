@@ -10,6 +10,7 @@ int choice {};
 int bindx {};
 int uindx{};
 int id{};
+int indx{};
 string uname{};
 string bname{};
 
@@ -23,12 +24,12 @@ struct book
     int borrowd;
     book()
     {
-        id = 0; name =""; quantity = borrowd = 0;
+        id = 0; name =""; quantity = 0 ,borrowd = 0;
     }
 
     void add_book() 
     {
-        cout << "Enter id,name,quantity :" << endl;
+        cout << "Enter Book info : ID , name & quantity :" << endl;
         cin >> id >> name >> quantity;
         bindx++;
     }
@@ -50,8 +51,8 @@ struct user
 
     void add_user()
     {
-        cout << "Enter id,name :" << endl;
-        cin >> id >> name;
+        cout << "Enter user info: name & ID :" << endl;
+        cin >> name >> id;
         uindx++;
     }
 };
@@ -108,13 +109,14 @@ int search_name(book books[],user users[],string name, int indx)
 }
 
 // search book by name
-void search_name(book books[],string name)
+void search_bookname(book books[],string name)
 {
     for (int i = 0; i <= bindx; i++)
     {
         if (name == books[i].name)
         {
             id = books[i].id;
+            indx = i;
         }
     }   
 }
@@ -145,6 +147,38 @@ void borrow (book books[], user users[])
     cout << "sorry this book is unavilable" << endl;  
 }
 
+void shift_left(user users[],int x, int end)
+{
+    for (int i = end+1; i < users[x].borrowed_q ; i++)
+    {
+     users[x].borrowed_id[i-1] = users[x].borrowed_id[i];  
+    }
+    
+}
+//return book
+void returning (book books[], user users[])
+{
+    cout << "Enter username and books name :";
+    cin >> uname >> bname;
+    search_bookname(books,bname);
+    for(int i = 0; i < uindx; i++)
+    {
+        if (uname == users[i].name)
+        {
+            for (int j = 0; j < users[i].borrowed_q; j++)
+            {
+                if (users[i].borrowed_id[j] == id)
+                {
+                    shift_left(users,i,j);
+                    users[i].borrowed_q--;
+                    books[indx].borrowd--;
+                }
+            }
+        }
+
+    }
+}
+
 // to sort books by name
 bool compare_name(book &a, book &b)
 {
@@ -157,18 +191,33 @@ bool compare_id(book &a, book &b)
     return (a.id < b.id);
 }
 
-// prining sorted books / users
+//print who borrowed book
+void who_borrowd(book books[], user users[], string name)
+{
+    search_bookname(books,name);
+    for (int i = 0; i < uindx; i++)
+    {
+        for (int j = 0; j < users[i].borrowed_q; j++)
+        {
+            if (users[i].borrowed_id[j] == id)
+            cout << users[i]. name << endl;
+        }
+        
+    }
+}
+
+// printing sorted books / users
 void print(int x, book books[], user users[])
 {
     if (x == 4)
     {
         for (int i = 0; i < bindx; i++)
-        cout << "ID = " << books[i].id << " , name = " << books[i].name << " , total quantity = " << books[i].quantity << " , total borrowed =  " << (books[i].quantity - books[i].borrowd) << endl ;
+        cout << "ID = " << books[i].id << " , name = " << books[i].name << " , total quantity = " << books[i].quantity << " , total borrowed =  " << books[i].borrowd << endl ;
     }
     else if (x == 5)
     {
         for (int i = 0; i < bindx; i++)
-        cout << "ID = " << books[i].id << " , name = " << books[i].name << " , total quantity = " << books[i].quantity << " , total borrowed =  " << (books[i].quantity - books[i].borrowd) << endl ;
+        cout << "ID = " << books[i].id << " , name = " << books[i].name << " , total quantity = " << books[i].quantity << " , total borrowed =  " << books[i].borrowd << endl ;
     }
     else if (x == 9)
     {
@@ -183,32 +232,12 @@ void print(int x, book books[], user users[])
     }
 }
 
-//print who borrowed book
-void who_borrowd(book books[], user users[], string name)
-{
-    search_name(books,name);
-    for (int i = 0; i < uindx; i++)
-    {
-        for (int j = 0; j < users[i].borrowed_q; j++)
-        {
-            if (users[i].borrowed_id[j] == id)
-            cout << users[i]. name << endl;
-        }
-        
-    }
-}
-
-
-
 
 
 int main()
 {
     book books[100];
     user users[20];
-    int indx;
-
-
     while (true)
     {
         menu();
@@ -262,7 +291,7 @@ int main()
             }
             case 8:
             {
-
+                returning(books,users);
                 break;
             }
             case 9:
