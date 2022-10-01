@@ -93,7 +93,7 @@ void search(book books[])
     cout << "No books with such prefix" << endl;
 }
 
-// search by name
+// search users by name
 int search_name(book books[],user users[],string name, int indx)
 {
     for (int i = 0; i <= uindx; i++)
@@ -103,6 +103,18 @@ int search_name(book books[],user users[],string name, int indx)
             users[i].borrowed_id[users[i].borrowed_q] = books[indx].id;
             users[i].borrowed_q++;
             books[indx].borrowd++;
+        }
+    }   
+}
+
+// search book by name
+void search_name(book books[],string name)
+{
+    for (int i = 0; i <= bindx; i++)
+    {
+        if (name == books[i].name)
+        {
+            id = books[i].id;
         }
     }   
 }
@@ -133,12 +145,13 @@ void borrow (book books[], user users[])
     cout << "sorry this book is unavilable" << endl;  
 }
 
-
+// to sort books by name
 bool compare_name(book &a, book &b)
 {
     return (a.name < b.name);
 }
 
+// to sort books by id
 bool compare_id(book &a, book &b)
 {
     return (a.id < b.id);
@@ -170,6 +183,21 @@ void print(int x, book books[], user users[])
     }
 }
 
+//print who borrowed book
+void who_borrowd(book books[], user users[], string name)
+{
+    search_name(books,name);
+    for (int i = 0; i < uindx; i++)
+    {
+        for (int j = 0; j < users[i].borrowed_q; j++)
+        {
+            if (users[i].borrowed_id[j] == id)
+            cout << users[i]. name << endl;
+        }
+        
+    }
+}
+
 
 
 
@@ -184,8 +212,15 @@ int main()
     while (true)
     {
         menu();
-        switch (choice)
+        if (!(choice >=1 && choice <= 10))
         {
+            cout << "please enter a vaild input" << endl;
+            continue;
+        }
+        else
+        {
+          switch (choice)
+            {
             case 1:
             {
                 books[bindx].add_book();
@@ -197,7 +232,10 @@ int main()
                 break;
             }
             case 3:
-            {                
+            {       
+                cout << "Enter the name of the book :";
+                cin >> bname;
+                who_borrowd(books,users,bname);         
                 break;
             }
             case 4:
@@ -235,8 +273,10 @@ int main()
             case 10:
             {
                 return 0;
-            }
-        }
+           }
+          }
+        } 
+        
 
     }
 }
