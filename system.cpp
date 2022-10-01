@@ -157,6 +157,17 @@ void print(int x, book books[], user users[])
         for (int i = 0; i < bindx; i++)
         cout << "ID = " << books[i].id << " , name = " << books[i].name << " , total quantity = " << books[i].quantity << " , total borrowed =  " << (books[i].quantity - books[i].borrowd) << endl ;
     }
+    else if (x == 9)
+    {
+        for (int i = 0; i < uindx; i++)
+        {
+            cout << "ID = " << users[i].id << " , name = " << users[i].name << " , number of borrowed books = " << users[i].borrowed_q << " IDs of books : ";
+            for (int j = 0; j < users[i].borrowed_q; j++)
+            cout << users[i].borrowed_id[j] << "  ";
+            
+            cout << endl;
+        }
+    }
 }
 
 
