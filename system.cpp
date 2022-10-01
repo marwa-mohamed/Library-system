@@ -10,6 +10,8 @@ int choice {};
 int bindx {};
 int uindx{};
 
+int status{};   // 1 = borowing book, 0 = not borrowing
+
 struct book
 {
     int id;
@@ -30,10 +32,24 @@ struct book
 };
 
 
-/*struct user
+struct user
 {
+    int id;
+    string name;
+    int status;
 
-};*/
+    user()
+    {
+        id = 0; name =""; status = 0;
+    }
+
+    void add_user()
+    {
+        cout << "Enter id,name :" << endl;
+        cin >> id >> name;
+        uindx++;
+    }
+};
 
 //printing menu;
 void menu()
@@ -77,8 +93,20 @@ bool compare_id(book &a, book &b)
     return (a.id < b.id);
 }
 
-
-
+// prining sorted books
+void print(int x, book books[])
+{
+    if (x == 4)
+    {
+        for (int i = 0; i < bindx; i++)
+        cout << "ID = " << books[i].id << " , name = " << books[i].name << " , total quantity = " << books[i].quantity << " , total borrowed = 0 " << endl ;
+    }
+    else if (x == 5)
+    {
+        for (int i = 0; i < bindx; i++)
+        cout << "ID = " << books[i].id << " , name = " << books[i].name << " , total quantity = " << books[i].quantity << " , total borrowed = 0 " << endl ;
+    }
+}
 
 
 
@@ -87,6 +115,10 @@ bool compare_id(book &a, book &b)
 int main()
 {
     book books[100];
+    user users[20];
+    int indx;
+
+
     while (true)
     {
         menu();
@@ -109,20 +141,18 @@ int main()
             case 4:
             {
                 sort (books,books+bindx,compare_id);
-                for (int i = 0; i < bindx; i++)
-                cout << "ID = " << books[i].id << " , name = " << books[i].name << " , total quantity = " << books[i].quantity << " , total borrowed = 0 " << endl ;
+                print (choice,books);
                 break;
             }
             case 5:
             {
                 sort (books,books+bindx,compare_name);
-                for (int i = 0; i < bindx; i++)
-                cout << "ID = " << books[i].id << " , name = " << books[i].name << " , total quantity = " << books[i].quantity << " , total borrowed = 0 " << endl ;
+                print (choice,books);
                 break;
             }
             case 6:
             {
-
+                users[uindx].add_user();
                 break;
             }
             case 7:
@@ -142,7 +172,6 @@ int main()
             }
             case 10:
             {
-
                 return 0;
             }
         }
