@@ -29,6 +29,12 @@ struct book
 
 };
 
+
+/*struct user
+{
+
+};*/
+
 //printing menu;
 void menu()
 {
@@ -60,10 +66,17 @@ void search(book books[])
         cout << books[i].name << endl;
     }   
 }
-/*struct user
-{
 
-};*/
+bool compare_name(book &a, book &b)
+{
+    return (a.name < b.name);
+}
+
+bool compare_id(book &a, book &b)
+{
+    return (a.id < b.id);
+}
+
 
 
 
@@ -90,19 +103,19 @@ int main()
                 break;
             }
             case 3:
-            {
-
+            {                
                 break;
             }
             case 4:
             {
-
+                sort (books,books+bindx,compare_id);
+                for (int i = 0; i < bindx; i++)
+                cout << "ID = " << books[i].id << " , name = " << books[i].name << " , total quantity = " << books[i].quantity << " , total borrowed = 0 " << endl ;
                 break;
             }
             case 5:
             {
 
-                break;
             }
             case 6:
             {
