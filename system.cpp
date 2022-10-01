@@ -302,7 +302,7 @@ int main()
             case 10:
             {
                 return 0;
-           }
+            }
           }
         } 
         
