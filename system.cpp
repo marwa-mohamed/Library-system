@@ -1,7 +1,33 @@
 #include <iostream>
 #include <algorithm>
+#include <string>
 using namespace std;
+
+// max books = 100;
+// max users = 20;
+
 int choice {};
+int bindx {};
+int uindx{};
+
+struct book
+{
+    int id;
+    string name;
+    int quantity;
+    book()
+    {
+        id = 0; name =""; quantity = 0;
+    }
+
+    void add_book() 
+    {
+        cout << "Enter id,name,quantity :" << endl;
+        cin >> id >> name >> quantity;
+        bindx++;
+    }
+
+};
 
 //printing menu;
 void menu()
@@ -17,9 +43,28 @@ void menu()
     cout << "8) user print book "<< endl;
     cout << "9) print users "<< endl;
     cout << "10) Exit "<< endl;
-    cout << "Enter your choice :";
+    cout << "Enter your choice : ";
     cin >> choice;
 }
+
+
+//search using prefix
+void search(book books[])
+{
+    string prefix {};
+    cin >> prefix;
+    int l = prefix.length();
+    for (int i = 0; i <= bindx; i++)
+    {
+        if (prefix == books[i].name.substr(0,l))
+        cout << books[i].name << endl;
+    }   
+}
+/*struct user
+{
+
+};*/
+
 
 
 
@@ -28,6 +73,7 @@ void menu()
 
 int main()
 {
+    book books[100];
     while (true)
     {
         menu();
@@ -35,12 +81,12 @@ int main()
         {
             case 1:
             {
-
+                books[bindx].add_book();
                 break;
             }
             case 2:
             {
-
+                search(books);
                 break;
             }
             case 3:
@@ -81,7 +127,7 @@ int main()
             case 10:
             {
 
-                break;
+                return 0;
             }
         }
 
