@@ -9,6 +9,9 @@ using namespace std;
 int choice {};
 int bindx {};
 int uindx{};
+int id{};
+string uname{};
+string bname{};
 
 int status{};   // 1 = borowing book, 0 = not borrowing
 
@@ -17,9 +20,10 @@ struct book
     int id;
     string name;
     int quantity;
+    int borrowd;
     book()
     {
-        id = 0; name =""; quantity = 0;
+        id = 0; name =""; quantity = borrowd = 0;
     }
 
     void add_book() 
@@ -36,11 +40,12 @@ struct user
 {
     int id;
     string name;
-    int status;
+    int borrowed_id[100];
+    int borrowed_q;
 
     user()
     {
-        id = 0; name =""; status = 0;
+        id = 0; name =""; borrowed_q = 0;
     }
 
     void add_user()
@@ -76,12 +81,58 @@ void search(book books[])
     string prefix {};
     cin >> prefix;
     int l = prefix.length();
+    int count = 0;
     for (int i = 0; i <= bindx; i++)
     {
         if (prefix == books[i].name.substr(0,l))
         cout << books[i].name << endl;
+        else
+        count++;
+    }
+    if (bindx+1 == count)   
+    cout << "No books with such prefix" << endl;
+}
+
+// search by name
+int search_name(book books[],user users[],string name, int indx)
+{
+    for (int i = 0; i <= uindx; i++)
+    {
+        if (name == users[i].name)
+        {
+            users[i].borrowed_id[users[i].borrowed_q] = books[indx].id;
+            users[i].borrowed_q++;
+            books[indx].borrowd++;
+        }
     }   
 }
+
+// borrowing books
+void borrow (book books[], user users[])
+{
+    cout << "Enter username and books name :";
+    cin >> uname >> bname;
+    for(int i = 0; i < bindx; i++)
+    {
+        if (bname == books[i].name)
+        {
+            int indx = i;
+            if (books[i].quantity > books[i].borrowd)
+            {
+                search_name(books,users,uname,indx);
+                return;
+            }
+            else
+            {
+                cout << "sorry this book is nolonger unavilable" << endl;
+                return;
+            }
+        }
+
+    }
+    cout << "sorry this book is unavilable" << endl;  
+}
+
 
 bool compare_name(book &a, book &b)
 {
@@ -93,18 +144,18 @@ bool compare_id(book &a, book &b)
     return (a.id < b.id);
 }
 
-// prining sorted books
-void print(int x, book books[])
+// prining sorted books / users
+void print(int x, book books[], user users[])
 {
     if (x == 4)
     {
         for (int i = 0; i < bindx; i++)
-        cout << "ID = " << books[i].id << " , name = " << books[i].name << " , total quantity = " << books[i].quantity << " , total borrowed = 0 " << endl ;
+        cout << "ID = " << books[i].id << " , name = " << books[i].name << " , total quantity = " << books[i].quantity << " , total borrowed =  " << (books[i].quantity - books[i].borrowd) << endl ;
     }
     else if (x == 5)
     {
         for (int i = 0; i < bindx; i++)
-        cout << "ID = " << books[i].id << " , name = " << books[i].name << " , total quantity = " << books[i].quantity << " , total borrowed = 0 " << endl ;
+        cout << "ID = " << books[i].id << " , name = " << books[i].name << " , total quantity = " << books[i].quantity << " , total borrowed =  " << (books[i].quantity - books[i].borrowd) << endl ;
     }
 }
 
@@ -141,13 +192,13 @@ int main()
             case 4:
             {
                 sort (books,books+bindx,compare_id);
-                print (choice,books);
+                print (choice,books,users);
                 break;
             }
             case 5:
             {
                 sort (books,books+bindx,compare_name);
-                print (choice,books);
+                print (choice,books,users);
                 break;
             }
             case 6:
@@ -157,7 +208,7 @@ int main()
             }
             case 7:
             {
-
+                borrow(books,users);
                 break;
             }
             case 8:
@@ -167,7 +218,7 @@ int main()
             }
             case 9:
             {
-
+                print (choice,books,users);
                 break;
             }
             case 10:
