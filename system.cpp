@@ -115,7 +115,10 @@ int main()
             }
             case 5:
             {
-
+                sort (books,books+bindx,compare_name);
+                for (int i = 0; i < bindx; i++)
+                cout << "ID = " << books[i].id << " , name = " << books[i].name << " , total quantity = " << books[i].quantity << " , total borrowed = 0 " << endl ;
+                break;
             }
             case 6:
             {
